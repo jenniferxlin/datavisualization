@@ -1,0 +1,174 @@
+<html>
+
+<body>
+
+    <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/topojson.v2.min.js"></script>
+        <style>
+            .country {
+                fill: lightgrey;
+                stroke: none;
+            }
+
+            .outline {
+                stroke: black;
+                stroke-width: 1px;
+                fill: none;
+            }
+
+            .graticule {
+                fill: none;
+                stroke: lightgrey;
+            }
+        </style>
+    </head>
+
+    <h1>Homework 6</h1>
+    <h2>Problem 1</h2>
+    <p id="p1">
+        <h3>Mercator Projection</h3>
+        <p id="p1d">
+            <svg id="mercator" width="600" height="400"></svg><br><br>
+            a) <b>Advantage</b>: Preserves the shapes and angles of areas, especially of small areas (ie. countries), so they are relatively true to the shapes and angles of the real-life land formations.<br>
+            b) <b>Drawback</b>: Distorts large land mass areas (ie. continents) that are farther away from the equator and closer to the poles, making them appear much larger relative to areas near the equator than they actually are.
+            (ie. Greenland and Africa appear to be same size when Greenland is actually much smaller than Africa.)<br>
+            c) <b>Well-suited</b> for marine navigation/nautical because its straight lines can be used to plot a straight-line course not only on land but through the water.
+        </p>
+        <h3>Equal Earth Projection</h3>
+        <p id="p1e">
+            <svg id="equalEarth" width="600" height="400"></svg><br><br>
+            a) <b>Advantage:</b> Unlike Mercator projection, preserves the relative areas of continents and countries in relation to each other (ie. proportion of Greenland and Africa areas are more accurate instead of appearing to be equal in size)<br>
+            b) <b>Drawback:</b> Curved longitudinal lines compress land masses that closer to the polar regions (North and South pole), making it difficult to see their features.<br>
+            c) <b>Well-suited</b> for thematic or choropleth maps that are mapping characteristics (ie. average temperature, population density, income, etc) to the areas.
+        </p>
+        <h3>Azimuthal Projection</h3>
+        <p id="p1f">
+            <svg id="azimuthalEqualArea" width="600" height="400"></svg><br><br>
+            a) <b>Advantage:</b> Distances from the center point of the projection to other areas of the map are relatively true to distances in real life especially for polar regions. Also best portrays spherical nature of Earth.<br>
+            b)<b>Drawback:</b> Distorts areas and shapes of land masses especially those latitudinally farther away from center point (ie. North America and Australia)<br>
+            c)<b>Well-suited</b> for air navigation which rely on the distance from polar regions to plan routes and locate selves on the map. 
+        </p>
+    </p>
+
+    <h2>Problem 2</h2>
+    <p id="p2">
+        <svg id="ny" width="800" height="700"></svg>
+    </p>
+    <script>
+        //async function to build the map
+        const requestData = async function () {
+            //load WORLD data 
+            var world = await d3.json("world_110m.json");
+
+            //MERCATOR PROJECTIONS
+            const svgA = d3.select("#mercator");
+            const widthA = svgA.attr("width");
+            const heightA = svgA.attr("height");
+            const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+            const mapA = svgA.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            //pick out topographic features and build d3 helper 
+            var countries = topojson.feature(world, world.objects.countries);
+            var countriesMesh = topojson.mesh(world, world.objects.countries);
+            var projectionA = d3.geoMercator().fitSize([widthA, heightA], countries);
+            var pathA = d3.geoPath().projection(projectionA);
+
+            //set latitude and longitude of lines
+            mapA.append("path")
+                .attr("class", "graticule")
+                .attr("d", pathA(d3.geoGraticule10()));
+
+            //draw shape of countries
+            mapA.selectAll("path.country").data(countries.features)
+                .join("path")
+                .attr("class", "country")
+                .attr("d", pathA);
+
+            //draw outline of countries
+            mapA.append("path").datum(countriesMesh)
+                .attr("class", "outline")
+                .attr("d", pathA);
+
+            //EQUAL EARTH PROJECTIONS
+            const svgB = d3.select("#equalEarth");
+            const widthB = svgB.attr("width");
+            const heightB = svgB.attr("height");
+            const mapB = svgB.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            var projectionB = d3.geoEqualEarth().fitSize([widthB, heightB], countries);
+            var pathB = d3.geoPath().projection(projectionB);
+
+            mapB.append("path")
+                .attr("class", "graticule")
+                .attr("d", pathB(d3.geoGraticule10()));
+
+            mapB.selectAll("path.country").data(countries.features)
+                .join("path")
+                .attr("class", "country")
+                .attr("d", pathB);
+
+            mapB.append("path").datum(countriesMesh)
+                .attr("class", "outline")
+                .attr("d", pathB);
+
+            //AZIMUTHAL PROJECTIONS
+            const svgC = d3.select("#azimuthalEqualArea");
+            const widthC = svgC.attr("width");
+            const heightC = svgC.attr("height");
+            const mapC = svgC.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            var projectionC = d3.geoAzimuthalEqualArea().fitSize([widthC, heightC], countries);
+            var pathC = d3.geoPath().projection(projectionC);
+
+            mapC.append("path")
+                .attr("class", "graticule")
+                .attr("d", pathC(d3.geoGraticule10()));
+
+            mapC.selectAll("path.country").data(countries.features)
+                .join("path")
+                .attr("class", "country")
+                .attr("d", pathC);
+
+            mapC.append("path").datum(countriesMesh)
+                .attr("class", "outline")
+                .attr("d", pathC);
+            
+            //load NY data 
+            var nyd = await d3.json("new_york_districts.json");
+            const svgNY = d3.select("#ny");
+            const widthNY = svgNY.attr("width");
+            const heightNY = svgNY.attr("height");
+            const mapNY = svgNY.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var districts = topojson.feature(nyd, nyd.objects.districts);
+            var projectionNY = d3.geoMercator().fitSize([widthNY, heightNY], districts);
+            var pathNY = d3.geoPath().projection(projectionNY);
+
+            //electoral choropleth colors 
+            const colorScale = d3.scaleLinear()
+                .domain([30,50,70]) 
+                .range(['red','lightgrey','blue'])
+                .clamp(true)                        //clamp to prevent numbers out of domain having crazy colors
+                .interpolate(d3.interpolateHcl);    //interpolate for blending between your chosen colors
+
+            mapNY.selectAll("path.district").data(districts.features)
+                .join("path")
+                .attr("class", "district")
+                .attr("d", pathNY)
+                .style("fill", d => colorScale(d.properties.percent_clinton))
+                .style("stroke", "white")
+                .style("stroke-width","1px");
+            
+            var ithaca = projectionNY([-76.5, 42.443333]);
+
+            console.log(ithaca);
+            mapNY.append("circle")
+                    .attr("cx", ithaca[0])
+                    .attr("cy", ithaca[1])
+                    .attr("r", 10)
+                    .attr("fill", "white");
+        }
+        requestData();
+    </script>
+</body>
+
+</html>

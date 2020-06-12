@@ -1,0 +1,271 @@
+<html>
+<body>
+    <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/topojson.v2.min.js"></script>
+        <style>
+            path {
+              stroke: white;
+              stroke-width: 0.25px;
+              fill: none;
+            }
+
+            svg {
+                padding: 0;
+                margin: 0;
+            }
+
+            h2, p {
+                text-align: center;
+            }
+            
+        </style>
+    </head>
+
+<h1>Homework 9 </h1>
+<h2>Dogs for Adoption (September 2019)</h2>
+<p id="optionE">
+    I chose the adoptable dogs dataset because there are a lot of interesting attributes to display.<br>
+    I want users to learn more about which states have a lot of dogs available for adoption and the age distribution among those dogs.<br><br>
+    <em>
+    The darker the color of the state, the more available dogs there are!<br>
+    Hover over any state to learn more about the age distribution of dogs available for adoption there. </em><br>
+    <svg id="usa" width="900" height="700"></svg>
+</p>
+
+<script>
+    const svg = d3.select("#usa");
+    const width = svg.attr("width");
+    const height = svg.attr("height");
+    const margin = { top: 30, right: 30, bottom: 30, left: 30 };
+    const mapWidth = width - margin.left - margin.right;
+    const mapHeight = height - margin.top - margin.bottom;
+    const map = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    const requestData = async function() {
+        //import us json file 
+        const us = await d3.json("us.json");
+
+        // topographic features and d3 helpers
+        var states = topojson.feature(us, us.objects.states);
+        var statesMesh = topojson.mesh(us, us.objects.states);
+        var projection = d3.geoAlbersUsa().fitSize([mapWidth, mapHeight], states);
+        var path = d3.geoPath().projection(projection);
+
+        // draw states shape and outline
+        map.selectAll("path.state").data(states.features)
+            .join("path")
+            .attr("class", "state")
+            .attr("note", d => d.id)
+            .attr("d", path)
+            .attr("stroke", "white")
+            .attr("stroke-width",1);
+        
+        map.append("path").datum(statesMesh)
+            .attr("class","outline")
+            .attr("d", path);
+
+        //import state ID names and adopted dog data
+        var pupper = await d3.csv("adoptable-dogs.csv");
+        var stateIDs = await d3.tsv("us-state-names.tsv");
+
+        let idToState = {}; 
+        //state or abbrev to total number of dog
+        let stateCounts = {}; 
+        let idCounts = {};
+
+        //dict with state abbrev to age distributions
+        let sen = {};
+        let adult = {};
+        let baby = {};
+        let young = {};
+
+        //dict with state name to age distributions
+        let senCounts = {};
+        let adultCounts = {};
+        let babyCounts = {};
+        let youngCounts = {};
+        
+        stateIDs.forEach(row => {
+            // state abbrev to total num dogs
+            idCounts[row.code] = 0;
+            // state abbrev to num of sen/adult/baby/young dogs
+            sen[row.code] = 0;
+            adult[row.code] = 0;
+            baby[row.code] = 0;
+            young[row.code] = 0;
+            
+            //filter to remove DC and territory islands
+            if (row.id != 11 && row.id < 59){
+                idToState[row.id] = row.name;
+            }
+
+            // state name with total num of dogs, sen, baby, young, adult
+            pupper.forEach(dog => {
+                if (dog.contact_state == row.code){
+                    idCounts[row.code] += 1;
+                }
+                if (dog.age == "Senior" && dog.contact_state == row.code){
+                    sen[row.code] +=1;
+                }
+                if (dog.age == "Baby" && dog.contact_state == row.code){
+                    baby[row.code] +=1;
+                }
+                if (dog.age == "Adult" && dog.contact_state == row.code){
+                    adult[row.code] +=1;
+                }
+                if (dog.age == "Young" && dog.contact_state == row.code){
+                    young[row.code] +=1;
+                }
+            })
+
+            // filter out DC and territory for state counts
+            if (idCounts[row.code] != 0 && row.code != 336){
+                stateCounts[row.name] = idCounts[row.code];
+            }
+            if (row.code != "DC" && row.code != "AS" && row.code != "FM" && row.code != "GU" && row.code != "AS"
+            && row.code != "MH" && row.code != "MP" && row.code != "PW" && row.code != "PR" && row.code != "UM" 
+            && row.code != "VI") {
+                senCounts[row.name] = sen[row.code];
+                adultCounts[row.name] = adult[row.code];
+                youngCounts[row.name] = young[row.code];
+                babyCounts[row.name] = baby[row.code]; 
+            }
+        });
+
+        //colorscale based on total num of dogs
+        const minMax = d3.extent(stateIDs, d => stateCounts[d.name]);
+
+        const colorScale = d3.scaleLinear().domain(d3.values(stateCounts))
+                            .range(["yellow", "orange", "red"])
+
+        //color in choropleth
+        map.selectAll(".state")
+        .style("fill", d => colorScale(stateCounts[idToState[d.id]]))
+        .style("opacity", 0.8);
+
+        // legend 
+        map.append("svg")
+            .attr("id", "maplegend")
+            .attr("width", 375)
+            .attr("height", 80)
+            .attr("x", 500)
+            .attr("y", 30);
+        
+        let mapLegend = d3.select("#maplegend")
+
+        map.append('text')
+        .text("Ranges for Total Number of Adoptable Dog")
+        .attr('x', 475)
+        .attr('y', 20);
+        mapLegend.selectAll('rect')
+            .data(['#F6B453', '#F28D4D', '#ED4B48'])
+            .enter()
+            .append('rect')
+            .attr("width", 75)
+            .attr("height", 50)
+            .attr("x", (d, i) => { return i * 75; })
+            .attr("y", 0)
+            .style('fill', d => { return d })
+            .style("opacity", 0.9);
+
+        var numRange = ["0 - 100", "100-1000", "1000+"];
+        numRange.forEach((d, i) => {
+        mapLegend.append("text")
+          .attr("x", i * 75 + 40)
+          .attr("y", 70)
+          .attr("text-anchor", "middle")
+          .text(d => { return numRange[i]; });
+      })
+
+        //hover label
+        let tooltipWidth = 160;
+        let tooltipHeight = 120;
+
+        let tooltip = map.append("g")
+                     .attr("class","tooltip")
+                     .attr("visibility","hidden");
+
+        tooltip.append("rect")
+           .attr("fill", "black")
+           .attr("opacity", 0.9)
+           .attr("width",tooltipWidth)
+           .attr("height",tooltipHeight)
+
+        let txt = tooltip.append("text")
+                     .attr("fill", "white")
+                     .attr("text-anchor","middle")
+                     .attr("alignment-baseline","hanging")
+                     .attr("x", tooltipWidth / 2.0)
+                     .attr("y", 5);
+        let txt2 = tooltip.append("text")
+                     .attr("fill", "white")
+                     .attr("text-anchor","middle")
+                     .attr("alignment-baseline","hanging")
+                     .attr("x", tooltipWidth / 2.0)
+                     .attr("y", 25);
+        let txt3 = tooltip.append("text")
+                     .attr("fill", "white")
+                     .attr("text-anchor","middle")
+                     .attr("alignment-baseline","hanging")
+                     .attr("x", tooltipWidth / 2.0)
+                     .attr("y", 45);
+        let txt4 = tooltip.append("text")
+                     .attr("fill", "white")
+                     .attr("text-anchor","middle")
+                     .attr("alignment-baseline","hanging")
+                     .attr("x", tooltipWidth / 2.0)
+                     .attr("y", 65);
+        let txt5 = tooltip.append("text")
+                     .attr("fill", "white")
+                     .attr("text-anchor","middle")
+                     .attr("alignment-baseline","hanging")
+                     .attr("x", tooltipWidth / 2.0)
+                     .attr("y", 85);
+        
+        let txt6 = tooltip.append("text")
+                     .attr("fill", "white")
+                     .attr("text-anchor","middle")
+                     .attr("alignment-baseline","hanging")
+                     .attr("x", tooltipWidth / 2.0)
+                     .attr("y", 105);
+
+        d3.selectAll(".state").on("mouseenter", mouseEntersPlot);
+        d3.selectAll(".state").on("mouseout",  mouseLeavesPlot);
+
+        //make tooltip visible on hover
+        function mouseEntersPlot() {
+            tooltip.style("visibility","visible")
+      
+            let state = d3.select(this);
+                state.style("opacity", 1);
+      
+            let stateName = idToState[state.datum().id];
+            txt.text(stateName);
+            txt2.text("Total Dogs: " + stateCounts[stateName]);
+            txt3.text("Seniors: " + senCounts[stateName]);
+            txt4.text("Adults: " + adultCounts[stateName]);
+            txt5.text("Youngsters: " + youngCounts[stateName]);
+            txt6.text("Babies: " + babyCounts[stateName]);
+
+            //centers and transforms tooltip smoothly
+            let bounds = path.bounds( state.datum() );   // Get the pixel boundaries of the state
+            let xPos = (bounds[0][0]+bounds[1][0])/2.0 - tooltipWidth/2.0;
+            let yPos = bounds[1][1];
+            tooltip.attr("transform","translate("+xPos+","+yPos+")");   
+        }
+
+        //hide tooltip and remove opacity once leave hover
+        function mouseLeavesPlot() {
+            tooltip.style("visibility","hidden");
+    
+            let state = d3.select(this);
+            state.style("opacity", 0.7);
+        }
+    }
+    requestData();
+</script>
+
+</body>
+</html>

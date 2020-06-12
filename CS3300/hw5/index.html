@@ -1,0 +1,146 @@
+<html><body>
+    <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+    </head>
+    <h1>Homework 5</h1>
+    <h2>Problem 1</h2>
+    <p id="p1">
+    </p>
+    <h2>Problem 2</h2>
+    <p id="p2"></p>
+    <script>
+    d3.json("tweets_weekly.json").then((data) => {
+        //create svgOne 
+        let svgOne = d3.select("p#p1").append("svg")
+                    .attr("width", 700)
+                    .attr("height", 400);
+
+        const width = svgOne.attr("width"); 
+        const height = svgOne.attr("height");
+        const margin = {top: 50, right: 50, bottom: 50, left: 50};
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.bottom - margin.top;
+
+        let annotationsOne = svgOne.append("g").attr("id","annotationsOne");
+        let chartOne = svgOne.append("g").attr("id","chartOne")
+                            .attr("transform","translate("+(margin.left+10)+","+(margin.top-10)+")");
+        
+        //converting dates into objects
+        const timeParser = d3.timeParse("%d-%m-%Y");
+        data.forEach(d => {
+            d["Date"] = timeParser(d["Date"]);
+        });
+
+        //finding min and max of dates (x-axis) and activity (y-axis)
+        const dateExtent = d3.extent(data, d=>d["Date"]);
+        let xScale = d3.scaleTime()
+                .domain(dateExtent,1) 
+                .range([0, chartWidth]); 
+
+        //all share same min but NonEnglish has highest max so using engExtent 
+        const engExtent = d3.extent(data, d=>d["NonEnglish"]); 
+        const newsExtent = d3.extent(data, d=>d["NewsFeed"]);
+        const hashExtent = d3.extent(data, d=>d["HashtagGamer"]);
+        let yScale = d3.scaleLinear()
+                .domain(engExtent) 
+                .range([chartHeight, 0]); 
+
+        // Y axis labels
+        let leftAxis = d3.axisLeft(yScale);
+        annotationsOne.append("g")
+            .attr("class", "y axis")
+            .attr("transform","translate("+(margin.left)+","+(margin.top-10)+")")
+            .call(leftAxis);
+  
+        // X axis labels, with intervals of every 2 months and format month abbrev 'year
+        let bottomAxis = d3.axisBottom(xScale)
+        .ticks(d3.timeMonth.every(2))
+        .tickFormat(d3.timeFormat("%b '%y"));
+        annotationsOne.append("g")
+            .attr("class", "x axis")
+            .attr("transform","translate("+(margin.left+10)+","+(chartHeight+margin.top)+")")
+            .call(bottomAxis);
+
+        //create line generator for each activity to draw path based on data
+        //curveStep makes the lines look like stair-steps rather than curves
+
+        //NonEnglish activity
+        let firstLineGen = d3.line()
+                  .x(d => xScale(d["Date"]))
+                  .y(d=> yScale(d["NonEnglish"]))
+                  .curve(d3.curveStep);
+        chartOne.append("path")
+           .datum(data)
+           .attr("class", "line")
+           .attr("fill", "none")
+           .attr("stroke", "green")
+           .attr("stroke-width", 1)
+           .attr("d", firstLineGen);
+
+        //NewsFeed activity
+        let secondLineGen = d3.line()
+            .x(d => xScale(d["Date"]))
+            .y(d=> yScale(d["NewsFeed"]))
+            .curve(d3.curveStep);
+        chartOne.append("path")
+           .datum(data)
+           .attr("class", "line")
+           .attr("fill", "none")
+           .attr("stroke", "red")
+           .attr("stroke-width", 1)
+           .attr("d", secondLineGen);
+
+        //Hashtag Gamer activity
+        let thirdLineGen = d3.line()
+            .x(d => xScale(d["Date"]))
+            .y(d=> yScale(d["HashtagGamer"]))
+            .curve(d3.curveStep);
+        chartOne.append("path")
+           .datum(data)
+           .attr("class", "line")
+           .attr("fill", "none")
+           .attr("stroke", "blue")
+           .attr("stroke-width", 1)
+           .attr("d", thirdLineGen);
+        
+        //second svg
+        let svgTwo = d3.select("p#p2").append("svg")
+                    .attr("width", 700)
+                    .attr("height", 400);
+
+        let annotationsTwo = svgTwo.append("g").attr("id","annotationsTwo");
+        let chartTwo = svgTwo.append("g").attr("id","chartTwo")
+                    .attr("transform","translate("+(margin.left+10)+","+(margin.top-10)+")");
+
+        // using the same x-axis as previous problem so don't need to create xScale
+        // scale y-axis for d["Total"] 
+        const totalExtent = d3.extent(data, d=>d["Total"]); 
+        let totalScale = d3.scaleLinear()
+                .domain(totalExtent) 
+                .range([chartHeight, 0]); 
+
+        //Y-axis labels
+        let leftAxisTwo = d3.axisLeft(totalScale);
+        annotationsTwo.append("g")
+            .attr("class", "y axis")
+            .attr("transform","translate("+(margin.left)+","+(margin.top-10)+")")
+            .call(leftAxisTwo);
+
+        //X-axis labels
+        annotationsTwo.append("g")
+            .attr("class", "x axis")
+            .attr("transform","translate("+(margin.left+10)+","+(chartHeight+margin.top)+")")
+            .call(bottomAxis);
+        
+        //create area generator to draw path based on data
+        let areaGen = d3.area()
+                  .x(d => xScale(d["Date"]))
+                  .y0(totalScale(totalExtent[0]))   //min total value so always stick to bottom of chart
+                  .y1(d=> totalScale(d["Total"]));
+        chartTwo.append("path")
+           .datum(data)
+           .attr("class", "area")
+           .attr("fill", "orange")
+           .attr("d", areaGen);
+    });
+</script>

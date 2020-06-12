@@ -1,0 +1,117 @@
+<html>
+<head>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+ 	<script src="https://d3js.org/topojson.v2.min.js"></script>
+  <style>
+    .answer {
+      width: 500px;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="answer">
+    <h5>#1</h5>
+    <p>A: Marks are points.</p>
+    <p>B: Data Type<br>
+      - Population (Thousands) is quantitative.<br>
+      - City (Edinburgh, Stockholm, Florence, etc.) is nominal.
+    </p>
+    <p>C: Visual Channels<br>
+      - Population (Thousands) is varying in horizontal position on an unaligned scale.<br>
+      - City (Edinburgh, Stockholm, Florence, etc.) is varying in vertical position on an aligned scale.
+    </p>
+    <p>
+      D: Scale Break<br>
+      The scale break is effective because since there is a large gap in the data points - with Naples, Paris, Constantinople, and London having significantly higher values than the other cities, 
+      the scale break allows the data points for these 4 cities to still be kept within the chart without distorting the appearance or spacing in the other data points. 
+    </p>
+    <p>
+      E: Data Type<br>
+      - Domain area (Biotech, ICT, Humanities, etc.) is nominal.<br>
+      - Social impact is ordinal.<br>
+      - Capital investment is quantitative.
+    </p>
+    <p>F: Visual Channels<br>
+      - Domain area (Biotech, ICT, Humanities, etc.) is varying in color hue.<br>
+      - Social impact is varying in vertical position on an aligned scale.<br>
+      - Capital investment is varying in volume.
+    </p>
+    <p>
+      G: 3D Bubble Chart Visualization<br><br>
+      This visualization can be ineffective because the numerous axes and dimensions can make it more difficult to determine the coordinates of a specific data point and thus negatively impact the accuracy of the data. 
+      For instance, it is hard to tell what the exact radii are for the domains ranked 5 through 9 due to their volumes appearing to be similar, as well as what the exact height of the domain ranked 2 since it does not appear to "hover in space" the way the other domains are. 
+    </p>
+  </div>
+  
+  <div class="answer">
+    <h5>#2</h5>
+    <ol>1. True</ol>
+    <ol>2. False</ol>
+    <ol>3. True</ol>
+    <ol>4. False</ol>
+    <ol>5. True</ol>
+  </div>
+  
+  <div class="answer">
+    <h5>#3</h5>
+    <ol>a) 5</ol>
+    <ol>b) 3</ol>
+    <ol>c) 1</ol>
+    <ol>d) 4</ol>
+    <ol>e) 2</ol>
+  </div>  
+  
+  <div class="answer">
+    <h5>#4</h5>
+    <p>
+      A: The type of visualization is parallel coordinates.
+    </p>
+    <p>
+      B: Each of the horizontal red and blue lines represents a data entry (in this case, a car in the database) plotted against 7 attributes which are represented by the 7 axes.
+    </p>
+    <p>
+      C: Advantage & Drawback<br>
+      - Advantage: Since each data entry is represented by a line connecting the axes, it is easy to understand the relationship between the variables (axes) by observing the pattern/trend in the collection of lines. <br>
+      - Drawback: If there are a lot of data points, especially ones sharing common values, the visual can become over-cluttered with overlaying lines, making it illegible and difficult to distinguish the lines (each entry) from each other.  
+    </p>
+  </div>  
+  
+  <div class="answer">
+    <h5>#5</h5>
+    <svg width=400 height=310 id="line">
+      <line x1=0 y1=300 x2=400 y2=300 stroke="grey" />
+    </svg>
+    <!--- Modify 5.js in order to answer this problem --->
+    <script type="text/javascript" src="5.js"></script>
+  </div>
+  
+  <div class="answer">
+    <h5>#6</h5>
+    <svg width=500 height=120 id="bars"></svg>
+    <!--- Modify 6.js in order to answer this problem --->
+    <script type="text/javascript" src="6.js"></script>
+  </div>
+  
+  <div class="answer">
+    <h5>#7</h5>
+    <div id="circleWrapper">
+    </div>
+    <input type="range" min="0" max="360" value="180" step="1" id="hueSlider" style="width: 342px; margin-top: 15px">
+    <!--- Modify 7.js in order to answer this problem --->
+    <script type="text/javascript" src="7.js"></script>
+  </div>
+  
+  <div class="answer">
+  <h5>#8</h5>
+    <svg width=500 height=500 id="map"></svg>
+    <p>Country: <span id="country"></span> <br/> 
+       Gini Coefficient: <span id="coeff"></span>  
+    </p>
+    <!--- Modify 8.js in order to answer this problem --->
+    <script type="text/javascript" src="8.js"></script>
+  </div>
+  
+  
+</body>
+</html>

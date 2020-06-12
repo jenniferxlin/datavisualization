@@ -1,0 +1,143 @@
+<html><body>
+<h2>Problem 1</h2>
+<p id="p1">(1a)<br>
+    Marks: Rectangles <br>
+    Channels: Varying in vertical aligned length, horizontal aligned position, and color hue of the rectangles<br>
+    <br>
+    (1b)<br>
+    Marks: Points or dots<br>
+    Channels: Varying in both horizontal and vertical aligned positions, and color hue of the dots.<br>
+    <br>
+    (1c)<br>
+    Marks: Shapes of the boxed counties<br>
+    Channels: Varying in area and color luminosity of boxed counties.<br>
+    <br>
+</p>
+
+<h2>Problem 2</h2>
+<p id="p2">
+(2a. number)<br>VALID<br>
+    <script>
+        console.log(typeof(8));
+    </script>
+    Unusual cases:<br> 
+    - Properties from built-in object Math (ie. Math.PI), Infinity, -Infinity, and NaN considered type number.<br>
+    - Division of zero also returns number rather than undefined.<br>
+    - Type coercion using math operations except addition returns number (ie. "6"-2 OR "3"*"3" OR 3+"7"). <br>
+    - Type coercion with number and boolean returns number. <br>
+    - Operation on two boolean values return number.<br><br>
+
+(2b. int)<br>NOT VALID. JS number type includes integers. <br><br>
+
+(2c. unicode)<br>NOT VALID. Typeof unicode returns string.<br><br>
+
+(2d. list)<br>NOT VALID. Typeof list returns object.<br><br>
+
+(2e. map)<br>NOT VALID. Typeof map returns object.<br><br>
+
+(2f. class)<br>NOT VALID. Typeof class returns function so considered function type.<br><br>
+
+(2g. regex)<br>NOT VALID. Typeof regex returns object.<br><br>
+(2h. string)<br>VALID<br>
+    <script>
+        console.log(typeof("heythere"));
+    </script>
+    Unusual cases: <br>
+    - Typeof char and unicode is string. <br>
+    - Type coercion: Adding string and number returns type string, not an error for operating on 2 different types.<br><br>
+
+(2i. boolean)<br>VALID<br>
+    <script>
+        console.log(typeof(1+1==2));
+    </script>
+    Unusual cases: <br>
+    - When Boolean function is applied to other types, typeof returns type boolean. (ie. typeof(Boolean(1)) returns boolean) <br>
+    - When using operators (&& or ||), they don't return boolean but the original operands (ie. "hello" && "123" returns "123" so type string)<br>
+    <br>
+
+(2j. object)<br>VALID<br>
+    <script>
+        console.log(typeof(Math));
+    </script>
+    Unusual cases: <br>
+    - Arrays, maps, and regex return as object.<br>
+    - There are also some functions (ie.console.log) that return as object. <br>
+    - And despite null being JS type null, their typeof is object.<br>
+    - All constructor functions (ie. new String('')) return as object, EXCEPT for new Function().<br>
+    <br>
+
+    (2k. null)<br>NOT VALID typeof output despite being a JS type <br>Unusual cases: Typeof null returns object even though its JS type is null. <br><br>
+    
+    (2l. function)<br>VALID despite not being JS type<br>
+    <script>
+        function motto(quality){
+            quality+="I am";
+            return quality;
+        }
+        console.log(typeof(motto));
+    </script>
+    Unusual cases: Although function technically belongs to JS object type, typeof returns function.<br>
+    Typeof class and methods in objects is function.<br>
+    Typeof new Function() is function, not object.<br>
+</p>
+
+<h2>Problem 3</h2>
+<p id="p3">Declaring with "let" can limit variable to scope of a block so cannot be accessed from outside the block.
+    While declaring with "var" allow variables to be accessed globally or locally in a function beyond the block scope. 
+</p>
+
+<h2>Problem 4</h2>
+<p id="p4">(4a.) <br>
+    Error Description: <br>
+    - Comments are not supported in JSON. <br>
+    - Values must be separated by commas.<br>
+    - There should be no trailing commas.<br>
+    <strong>Fixed Version: [1, 2, 3, 4, 5]</strong><br><br>
+    <script>
+        JSON.parse('[1, 2, 3, 4, 5]');
+    </script>
+    (4b.) <br>
+    Error Description: <br>
+    - Key and values in JSON objects are separated by colon, not dashes.<br>
+    - Missing comma in between each JSON object.<br>
+    - Last JSON object missing a curly brace at the end.<br>
+    <strong>Fixed Version: [{ "name":"DDWA", "number": 3300 },{ "name": "Java", "number":2110 },{"name": "Python", "number": 1110}]</strong><br><br>
+    <script>
+        JSON.parse('[{ "name":"DDWA", "number": 3300 },{ "name": "Java", "number":2110 },{"name": "Python", "number": 1110}]');
+    </script>
+
+    (4c.) <br>
+    Error Description: <br>
+    - Keys in JSON objects must be strings in double quotes. <br>
+    - String values must also be in double quotes, not single quotes.<br>
+    - Key-value pairs must be separated by commas.<br>
+    <strong>Fixed Version: {"netid": "tk421","query": "do you copy?"}</strong><br><br>
+    <script>
+        JSON.parse('{"netid": "tk421","query": "do you copy?"}');
+    </script>
+    (4d.) <br>
+    Error Description: <br>
+    - JSON Values must be of type string, number, null, or boolean, so (6-3) and undefined are not valid JSON values.<br>
+    <strong>Fixed Version: [3, 4, 5.5, 6.5432, "(6 - 3)", null]</strong><br><br>
+    <script>
+        JSON.parse('[3, 4, 5.5, 6.5432, "(6 - 3)", null]');
+    </script>
+</p>
+
+<h2>Problem 5</h2>
+<p id="p5">
+JSON Expression: {"string": "a", "bool":true, "list":["apple","air"], "object":{"name":"Annabelle", "age":21}}<br>
+<script>
+    let dict = {"number": 1, "bool":true, "list":["apple","air"], "object":{"name":"Annabelle", "age":21}};
+    console.log( dict );
+</script>
+</p>
+
+<h2>Problem 6</h2><p id="p4">
+<p id="p6">
+Homework is usually due on Mondays at 11:59PM via Canvas submission, while projects are submitted via team's Github repository. 
+All students are automatically granted 2 slip days for homework and can earn a max of 3 more via Campuswire discussions. 
+If use all slip days and submit after deadline, work will be considered late and will receive a grade of 0 with no exceptions. 
+Canvas file submissions must be openable. If not, they will be considered late. 
+</p>
+</body></html>

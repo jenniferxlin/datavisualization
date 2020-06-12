@@ -1,0 +1,107 @@
+<html>
+<body>
+    <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+    </head>
+
+<h1>Homework 8: </h1>
+<h2>2019 Domestic Exports Treemap</h2>
+<p id="optionA">
+    <svg id="treemap" width=700 height=700></svg>
+</p>
+
+<script>
+    // svg styling 
+    d3.select("#treemap")
+        .style("display","block");
+
+    //svg attributes
+    const treemapWidth = d3.select("#treemap").attr("width");
+    const treemapHeight = d3.select("#treemap").attr("height");
+    const treemapChart = d3.select("#treemap").append("g");
+
+    //import JSON asynchronously
+    const drawTreemap = async () => {
+
+    // Load domestic exports dataset
+    const domExports = await d3.json("2019-domestic-exports.hierarchy.json");
+    
+    //creates hierarchy from data
+    let root = d3.hierarchy(domExports, d=>d["Children"])   //root of node -> look at 'Children' property
+             .sum(d => d["Total Exports ($)"])              //sum up total number of exports
+             .sort(function(a, b) { 
+                 return b.height - a.height || b.value - a.value; 
+                });
+
+    // generates treemap from hierarchy
+    var treemap = d3.treemap()
+      .tile(d3.treemapResquarify)               // tiling method 
+      .size([treemapWidth, treemapHeight])
+      .round(true)
+      .paddingInner(1);
+
+    // apply tree map to root node to make them leaves which can be called by root.leaves()
+    treemap(root); 
+
+    //color scale
+    let colorScale = d3.scaleOrdinal(d3.schemeCategory10.map(color => d3.interpolateRgb(color, "#fff")(0.4)));
+    
+    // 68 leaves represent 68 total exports in JSON file
+    let leaves = root.leaves(); 
+    
+    //use data join to draw in rects
+    let rectangles = treemapChart.selectAll('g').data(leaves)
+           .join('g')
+           .append('rect')                              //makes a rect for each leaf
+           .attr('id',d => {
+               return d['data']["Total Exports ($)"];   //set id as each export
+           })
+           .attr('fill', d => colorScale(d['parent']['data']['SITC Code']))     //color by SITC Code which is category of the export 
+           .attr('x', d => d.x0)                        //these coordinates are properties provided in each 68 nodes
+           .attr('y', d => d.y0)
+           .attr('width', d => d.x1 - d.x0)
+           .attr('height', d => d.y1 - d.y0);
+    
+    //make text label 
+    d3.select('#optionA').append('text')
+           .attr('id','label')
+           .style("padding", "0px, 10px");
+
+    //style selected/hovered rect and show text label
+    rectangles.on("mouseover", function() {
+        d3.select(this)
+            .transition().duration(200)
+            .attr("stroke-width",4)
+            .attr("stroke","black")
+            .attr("stroke-width",1);
+        
+        let node = d3.select(this).datum();
+        let details = d3.select(this).datum()['data']["Description"];
+
+        d3.select("#label")
+            .text(details)
+            .style('font-size', 16)
+            .style('font-weight','bold');
+    });
+
+    //undo style changes when no longer hover
+    rectangles.on("mouseout", function() {
+        d3.select(this)
+            .transition().duration(200)
+            .attr("stroke","none");
+
+        d3.select("#label")
+            .text("");
+    });
+
+    //justification text
+    d3.select("#optionA").append("text")
+    .text(" I chose to put the text label underneath the graph rather than near the hovered rectangle since some descriptions are quite long and can cover other rectangles or may be confused for descriptions for the other rectangles.")
+    .style("display", "block")
+    .style("width", "800px")
+    .style("padding", "12px 0px");
+    }
+    drawTreemap();
+</script>
+</body>
+</html>

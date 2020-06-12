@@ -1,0 +1,406 @@
+{
+    "SITC Code": "-",
+    "Description": "ALL COMMODITIES",
+    "Children": [
+        {
+            "SITC Code": "0",
+            "Description": "FOOD AND LIVE ANIMALS",
+            "Children": [
+                {
+                    "SITC Code": "00",
+                    "Description": "LIVE ANIMALS OTHER THAN FISH, CRUSTACEANS, MOLLUSCS AND AQUATIC INVERTEBRATES OF DIVISION 03",
+                    "Total Exports ($)": 1002874513
+                },
+                {
+                    "SITC Code": "01",
+                    "Description": "MEAT AND MEAT PREPARATIONS",
+                    "Total Exports ($)": 19224096948
+                },
+                {
+                    "SITC Code": "02",
+                    "Description": "DAIRY PRODUCTS AND BIRDS' EGGS",
+                    "Total Exports ($)": 5113660958
+                },
+                {
+                    "SITC Code": "03",
+                    "Description": "FISH (NOT MARINE MAMMALS), CRUSTACEANS, MOLLUSCS AND AQUATIC INVERTEBRATES, AND PREPARATIONS THEREOF",
+                    "Total Exports ($)": 4906746242
+                },
+                {
+                    "SITC Code": "04",
+                    "Description": "CEREALS AND CEREAL PREPARATIONS",
+                    "Total Exports ($)": 20870861068
+                },
+                {
+                    "SITC Code": "05",
+                    "Description": "VEGETABLES AND FRUIT",
+                    "Total Exports ($)": 22492988739
+                },
+                {
+                    "SITC Code": "06",
+                    "Description": "SUGARS, SUGAR PREPARATIONS AND HONEY",
+                    "Total Exports ($)": 1872700591
+                },
+                {
+                    "SITC Code": "07",
+                    "Description": "COFFEE, TEA, COCOA, SPICES AND MANUFACTURES THEREOF",
+                    "Total Exports ($)": 2991728735
+                },
+                {
+                    "SITC Code": "08",
+                    "Description": "FEEDING STUFF FOR ANIMALS (NOT INCLUDING UNMILLED CEREALS)",
+                    "Total Exports ($)": 11961420258
+                },
+                {
+                    "SITC Code": "09",
+                    "Description": "MISCELLANEOUS EDIBLE PRODUCTS AND PREPARATIONS",
+                    "Total Exports ($)": 9836531587
+                }
+            ]
+        },
+        {
+            "SITC Code": "1",
+            "Description": "BEVERAGES AND TOBACCO",
+            "Children": [
+                {
+                    "SITC Code": "11",
+                    "Description": "BEVERAGES",
+                    "Total Exports ($)": 5081775731
+                },
+                {
+                    "SITC Code": "12",
+                    "Description": "TOBACCO AND TOBACCO MANUFACTURES",
+                    "Total Exports ($)": 942937601
+                }
+            ]
+        },
+        {
+            "SITC Code": "2",
+            "Description": "CRUDE MATERIALS, INEDIBLE, EXCEPT FUELS",
+            "Children": [
+                {
+                    "SITC Code": "21",
+                    "Description": "HIDES, SKINS AND FURSKINS, RAW",
+                    "Total Exports ($)": 1047409137
+                },
+                {
+                    "SITC Code": "22",
+                    "Description": "OIL SEEDS AND OLEAGINOUS FRUITS",
+                    "Total Exports ($)": 20715142272
+                },
+                {
+                    "SITC Code": "23",
+                    "Description": "CRUDE RUBBER (INCLUDING SYNTHETIC AND RECLAIMED)",
+                    "Total Exports ($)": 2213954263
+                },
+                {
+                    "SITC Code": "24",
+                    "Description": "CORK AND WOOD",
+                    "Total Exports ($)": 6096598401
+                },
+                {
+                    "SITC Code": "25",
+                    "Description": "PULP AND WASTE PAPER",
+                    "Total Exports ($)": 8358052697
+                },
+                {
+                    "SITC Code": "26",
+                    "Description": "TEXTILE FIBERS (OTHER THAN WOOL TOPS AND OTHER COMBED WOOL) AND THEIR WASTES (NOT MANUFACTURED INTO YARN OR FABRIC)",
+                    "Total Exports ($)": 7971100016
+                },
+                {
+                    "SITC Code": "27",
+                    "Description": "CRUDE FERTILIZERS (IMPORTS ONLY), EXCEPT THOSE OF DIVISION 56, AND CRUDE MINERALS (EXCLUDING COAL, PETROLEUM AND PRECIOUS STONES)",
+                    "Total Exports ($)": 2662152235
+                },
+                {
+                    "SITC Code": "28",
+                    "Description": "METALLIFEROUS ORES AND METAL SCRAP",
+                    "Total Exports ($)": 21600747267
+                },
+                {
+                    "SITC Code": "29",
+                    "Description": "CRUDE ANIMAL AND VEGETABLE MATERIALS, N.E.S.",
+                    "Total Exports ($)": 3351340787
+                }
+            ]
+        },
+        {
+            "SITC Code": "3",
+            "Description": "MINERAL FUELS, LUBRICANTS AND RELATED MATERIALS",
+            "Children": [
+                {
+                    "SITC Code": "32",
+                    "Description": "COAL, COKE AND BRIQUETTES",
+                    "Total Exports ($)": 10120119022
+                },
+                {
+                    "SITC Code": "33",
+                    "Description": "PETROLEUM, PETROLEUM PRODUCTS AND RELATED MATERIALS",
+                    "Total Exports ($)": 156993290874
+                },
+                {
+                    "SITC Code": "34",
+                    "Description": "GAS, NATURAL AND MANUFACTURED",
+                    "Total Exports ($)": 30483358635
+                },
+                {
+                    "SITC Code": "35",
+                    "Description": "ELECTRIC CURRENT",
+                    "Total Exports ($)": 408069985
+                }
+            ]
+        },
+        {
+            "SITC Code": "4",
+            "Description": "ANIMAL AND VEGETABLE OILS, FATS AND WAXES",
+            "Children": [
+                {
+                    "SITC Code": "41",
+                    "Description": "ANIMAL OILS AND FATS",
+                    "Total Exports ($)": 817453992
+                },
+                {
+                    "SITC Code": "42",
+                    "Description": "FIXED VEGETABLE FATS AND OILS, CRUDE, REFINED OR FRACTIONATED",
+                    "Total Exports ($)": 1453104313
+                },
+                {
+                    "SITC Code": "43",
+                    "Description": "ANIMAL OR VEGETABLE FATS AND OILS PROCESSED; WAXES AND INEDIBLE MIXTURES OR PREPARATIONS OF ANIMAL OR VEGETABLE FATS OR OILS, N.E.S.",
+                    "Total Exports ($)": 229972357
+                }
+            ]
+        },
+        {
+            "SITC Code": "5",
+            "Description": "CHEMICALS AND RELATED PRODUCTS, N.E.S.",
+            "Children": [
+                {
+                    "SITC Code": "51",
+                    "Description": "ORGANIC CHEMICALS",
+                    "Total Exports ($)": 36484522813
+                },
+                {
+                    "SITC Code": "52",
+                    "Description": "INORGANIC CHEMICALS",
+                    "Total Exports ($)": 10755865227
+                },
+                {
+                    "SITC Code": "53",
+                    "Description": "DYEING, TANNING AND COLORING MATERIALS",
+                    "Total Exports ($)": 7218713990
+                },
+                {
+                    "SITC Code": "54",
+                    "Description": "MEDICINAL AND PHARMACEUTICAL PRODUCTS",
+                    "Total Exports ($)": 52786915094
+                },
+                {
+                    "SITC Code": "55",
+                    "Description": "ESSENTIAL OILS AND RESINOIDS AND PERFUME MATERIALS; TOILET, POLISHING AND CLEANSING PREPARATIONS",
+                    "Total Exports ($)": 16799105325
+                },
+                {
+                    "SITC Code": "56",
+                    "Description": "FERTILIZERS (EXPORTS INCLUDE GROUP 272; IMPORTS EXCLUDE GROUP 272)",
+                    "Total Exports ($)": 3140074583
+                },
+                {
+                    "SITC Code": "57",
+                    "Description": "PLASTICS IN PRIMARY FORMS",
+                    "Total Exports ($)": 35461021001
+                },
+                {
+                    "SITC Code": "58",
+                    "Description": "PLASTICS IN NONPRIMARY FORMS",
+                    "Total Exports ($)": 13345276296
+                },
+                {
+                    "SITC Code": "59",
+                    "Description": "CHEMICAL MATERIALS AND PRODUCTS, N.E.S.",
+                    "Total Exports ($)": 34480348948
+                }
+            ]
+        },
+        {
+            "SITC Code": "6",
+            "Description": "MANUFACTURED GOODS CLASSIFIED CHIEFLY BY MATERIAL",
+            "Children": [
+                {
+                    "SITC Code": "61",
+                    "Description": "LEATHER, LEATHER MANUFACTURES, N.E.S., AND DRESSED FURSKINS",
+                    "Total Exports ($)": 772333016
+                },
+                {
+                    "SITC Code": "62",
+                    "Description": "RUBBER MANUFACTURES, N.E.S.",
+                    "Total Exports ($)": 9340312468
+                },
+                {
+                    "SITC Code": "63",
+                    "Description": "CORK AND WOOD MANUFACTURES OTHER THAN FURNITURE",
+                    "Total Exports ($)": 1927379950
+                },
+                {
+                    "SITC Code": "64",
+                    "Description": "PAPER, PAPERBOARD, AND ARTICLES OF PAPER PULP, PAPER OR PAPER BOARD",
+                    "Total Exports ($)": 14728666989
+                },
+                {
+                    "SITC Code": "65",
+                    "Description": "TEXTILE YARN, FABRICS, MADE-UP ARTICLES, N.E.S., AND RELATED PRODUCTS",
+                    "Total Exports ($)": 11936220285
+                },
+                {
+                    "SITC Code": "66",
+                    "Description": "NONMETALLIC MINERAL MANUFACTURES, N.E.S.",
+                    "Total Exports ($)": 11724673734
+                },
+                {
+                    "SITC Code": "67",
+                    "Description": "IRON AND STEEL",
+                    "Total Exports ($)": 12135657452
+                },
+                {
+                    "SITC Code": "68",
+                    "Description": "NONFERROUS METALS",
+                    "Total Exports ($)": 15077025571
+                },
+                {
+                    "SITC Code": "69",
+                    "Description": "MANUFACTURES OF METALS, N.E.S.",
+                    "Total Exports ($)": 26077799513
+                }
+            ]
+        },
+        {
+            "SITC Code": "7",
+            "Description": "MACHINERY AND TRANSPORT EQUIPMENT",
+            "Children": [
+                {
+                    "SITC Code": "71",
+                    "Description": "POWER GENERATING MACHINERY AND EQUIPMENT",
+                    "Total Exports ($)": 36348828846
+                },
+                {
+                    "SITC Code": "72",
+                    "Description": "MACHINERY SPECIALIZED FOR PARTICULAR INDUSTRIES",
+                    "Total Exports ($)": 45236888923
+                },
+                {
+                    "SITC Code": "73",
+                    "Description": "METALWORKING MACHINERY",
+                    "Total Exports ($)": 4812212490
+                },
+                {
+                    "SITC Code": "74",
+                    "Description": "GENERAL INDUSTRIAL MACHINERY AND EQUIPMENT, N.E.S., AND MACHINE PARTS, N.E.S.",
+                    "Total Exports ($)": 60731519771
+                },
+                {
+                    "SITC Code": "75",
+                    "Description": "OFFICE MACHINES AND AUTOMATIC DATA PROCESSING MACHINES",
+                    "Total Exports ($)": 17696380685
+                },
+                {
+                    "SITC Code": "76",
+                    "Description": "TELECOMMUNICATIONS AND SOUND RECORDING AND REPRODUCING APPARATUS AND EQUIPMENT",
+                    "Total Exports ($)": 19608787507
+                },
+                {
+                    "SITC Code": "77",
+                    "Description": "ELECTRICAL MACHINERY, APPARATUS AND APPLIANCES, N.E.S., AND ELECTRICAL PARTS THEREOF (INCLUDING NONELECTRICAL COUNTERPARTS OF HOUSEHOLD TYPE, N.E.S.)",
+                    "Total Exports ($)": 79351981702
+                },
+                {
+                    "SITC Code": "78",
+                    "Description": "ROAD VEHICLES (INCLUDING AIR-CUSHION VEHICLES)",
+                    "Total Exports ($)": 119549588308
+                },
+                {
+                    "SITC Code": "79",
+                    "Description": "TRANSPORT EQUIPMENT, N.E.S.",
+                    "Total Exports ($)": 123209668534
+                }
+            ]
+        },
+        {
+            "SITC Code": "8",
+            "Description": "MISCELLANEOUS MANUFACTURED ARTICLES",
+            "Children": [
+                {
+                    "SITC Code": "81",
+                    "Description": "PREFABRICATED BUILDINGS; SANITARY, PLUMBING, HEATING AND LIGHTING FIXTURES AND FITTINGS, N.E.S.",
+                    "Total Exports ($)": 2394759870
+                },
+                {
+                    "SITC Code": "82",
+                    "Description": "FURNITURE AND PARTS THEREOF; BEDDING, MATTRESSES, MATTRESS SUPPORTS, CUSHIONS AND SIMILAR STUFFED FURNISHINGS",
+                    "Total Exports ($)": 5947278190
+                },
+                {
+                    "SITC Code": "83",
+                    "Description": "TRAVEL GOODS, HANDBAGS AND SIMILAR CONTAINERS",
+                    "Total Exports ($)": 666673375
+                },
+                {
+                    "SITC Code": "84",
+                    "Description": "ARTICLES OF APPAREL AND CLOTHING ACCESSORIES",
+                    "Total Exports ($)": 3214097767
+                },
+                {
+                    "SITC Code": "85",
+                    "Description": "FOOTWEAR",
+                    "Total Exports ($)": 1132286157
+                },
+                {
+                    "SITC Code": "87",
+                    "Description": "PROFSSIONAL, SCIENTIFIC AND CONTROLLING INSTRUMENTS AND APPARATUS, N.E.S.",
+                    "Total Exports ($)": 51145091219
+                },
+                {
+                    "SITC Code": "88",
+                    "Description": "PHOTOGRAPHIC APPARATUS, EQUIPMENT AND SUPPLIES AND OPTICAL GOODS, N.E.S.; WATCHES AND CLOCKS",
+                    "Total Exports ($)": 6576619282
+                },
+                {
+                    "SITC Code": "89",
+                    "Description": "MISCELLANEOUS MANUFACTURED ARTICLES, N.E.S.",
+                    "Total Exports ($)": 55662631060
+                }
+            ]
+        },
+        {
+            "SITC Code": "9",
+            "Description": "COMMODITIES AND TRANSACTIONS NOT CLASSIFIED ELSEWHERE IN THE SITC",
+            "Children": [
+                {
+                    "SITC Code": "93",
+                    "Description": "SPECIAL TRANSACTIONS AND COMMODITIES NOT CLASSIFIED ACCORDING TO KIND",
+                    "Total Exports ($)": 10334721935
+                },
+                {
+                    "SITC Code": "95",
+                    "Description": "COIN, INCLUDING GOLD COIN; PROOF AND PRESENTATION SETS AND CURRENT COIN",
+                    "Total Exports ($)": 196123267
+                },
+                {
+                    "SITC Code": "96",
+                    "Description": "COIN (OTHER THAN GOLD COIN), NOT BEING LEGAL TENDER",
+                    "Total Exports ($)": 21131318
+                },
+                {
+                    "SITC Code": "97",
+                    "Description": "GOLD, NONMONETARY (EXCLUDING GOLD ORES AND CONCENTRATES)",
+                    "Total Exports ($)": 18227591170
+                },
+                {
+                    "SITC Code": "99",
+                    "Description": "ESTIMATE OF NON-CANADIAN LOW VALUE SHIPMENTS; COMPILED LOW VALUE SHIPMENTS TO CANADA; AND VARIOUS EXPORT SHIPMENTS NOT IDENTIFIED BY KIND",
+                    "Total Exports ($)": 37581702696
+                }
+            ]
+        }
+    ]
+}

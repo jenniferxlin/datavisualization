@@ -1,0 +1,115 @@
+<html>
+<body>
+    <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+    </head>
+
+<h1>Homework 7</h1>
+<h2>Problem 1</h2>
+    <p id="p1">
+        <svg id="network" width=600 height=300></svg>
+    </p>
+    <script>
+        const svg = d3.select("#network");
+        const width = Number(svg.attr("width"));
+        const height = Number(svg.attr("height"));
+        const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+        const area = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        const requestData = async function () {
+            //load data 
+            const nodes = await d3.csv("senate.109.rollcall.nodes.csv");
+            const edges = await d3.csv("senate.109.rollcall.edges.csv");
+            
+            //set political affiliation color scale 
+            const colorScale = d3.scaleOrdinal()
+                .domain(["Rep","Ind", "Dem"])
+                .range(["red","yellow","blue"]);
+            
+            // construct force model for network diagram
+            var sim = d3.forceSimulation()
+                .nodes(nodes)                       // pass in nodes for simulation
+                .force("links", d3.forceLink()     // linking force for edges to keep nodes connected near each other
+                        .links(edges)              // give the force an array of source/target objects
+                        .id(d => d['icpsr']))      // ispr property both in nodes and edges data
+                .force("repulse", d3.forceManyBody().strength(-18)) // repulsion between nodes to spread them out
+                
+                //y positioning
+                .force("ypos", d3.forceY()                                    
+                        .y(d => height/2)          //pulls all nodes vertically towards the middle
+                        .strength(0.05))             //strength less than 1 so not crushed into one line
+
+                // x positioning
+                .force("xpos", d3.forceX()           //pulls nodes to different x locations based on their party
+                        .x(d => {
+                            if (d.party == "Dem"){   
+                                return width*0.25;
+                            }
+                            if (d.party == "Rep"){
+                                return width*0.75;
+                            }
+                            if (d.party == "Ind"){
+                                return width*0.5;
+                            }
+                        })
+                        .strength(0.05))
+                    .on("tick", render);
+
+            // update model for a new tick of the simulation
+            function render() {
+                let lines = area.selectAll("line.link").data(edges)        //draw edges via data join 
+                                .join(enter => {enter.append("line")
+                                         .attr("class","link")
+                                         .attr("stroke","lightgrey")
+                                         .attr("stroke-width", 0.5)})
+                                .attr("x1", d => d.source.x)   //access x and y coordinates of nodes via d3.forceLink pointers
+                                .attr("x2", d => d.target.x)   
+                                .attr("y1", d => d.source.y)
+                                .attr("y2", d => d.target.y)
+                                .style("opacity", 1.0);
+                                
+                let circles = area.selectAll("circle.node").data(nodes)       //draw nodes via data join
+                                   .join(enter => {enter.append("circle")
+                                            .attr("class","node")
+                                            .attr("fill", d => colorScale(d.party))
+                                            .attr("stroke", "black")
+                                            .attr("r", 4)
+                                    })
+                                    .attr("cx", d => d.x)
+                                    .attr("cy", d => d.y)
+                                    .call(d3.drag().on("start",start)
+                                               .on("drag",dragging)
+                                               .on("end",end));
+            }
+            render(); // called at least once to make sure circles drawn even if simulation stops
+
+            // add text label when dragged
+            var label = area.append("text").attr("id","label");
+
+            function start(d) {
+                if (!d3.event.active) {
+                    label.text(d.name);
+                    sim.alphaTarget(0.03).restart();
+                }
+                d.fx = d3.event.x;
+                d.fy = d3.event.y;
+                label.attr("x", d3.event.x + 5).attr("y",d3.event.y);
+            }
+
+            function dragging(d) {
+                d.fx = d3.event.x;
+                d.fy = d3.event.y;
+                label.attr("x",d3.event.x + 5).attr("y",d3.event.y);
+            }
+
+            function end(d) {
+                if (!d3.event.active) {
+                    sim.alphaTarget(0);
+                    label.text("");
+                }
+                d.fx = null;
+                d.fy = null;
+            }
+        }
+        requestData();
+    </script>

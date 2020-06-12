@@ -1,0 +1,244 @@
+<html><body>
+    <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+    </head>
+    
+    <h1>Homework 4</h1>
+    <h2>Problem 1</h2>
+    <p id="p1">
+    </p> 
+    <p id="p1a">
+        <strong style="color: blue;">A. Data Quality </strong> <br>- Price formatting is not consistent, with some having dollar signs while others just being integers. 
+        Removed those with dollar signs to convert them to regular integers. <br>- Some wines found in fake states, specifically Venus and Mars, so removed them and restricted to only those from NY, WA, OR, CA.
+        <br>- Also some of the wines do not have a country (value of "N/A"), so it was restricted to U.S. to ensure they are states rather than other locations that share the same name. 
+    </p>
+    <p id="p1b">
+        <strong style="color: blue;">B. Scaling </strong><br>- Since many of the price and point values are very close together, chose to use a linear scale to better visualize these smaller changes in both units rather than logarithmic scale which would be better suited for data with larger changes between each point. 
+        <br>- Made endpoints of domain in both scales greater than max price and point to make the axes' tick marks to be equidistant (equal intervals) and ensure the actual max values are plotted within the graph and not beyond it.
+        <br>- For the point scale, the domain starts at the minimum rather than 0 or else the datapoints would be too far up from the x-axis and thus more condensed on the upper-half of the graph, making it more difficult to see the small movements in the data.
+    </p>
+    <p id="p1c">
+        <strong style="color: blue;">C. Circle Elements</strong><br>- Since there are similar prices and points within the data, there is a lot of overlap, so lowered the opacity to allow users to better see where the data points are concentrated.
+        <br>- Advantage: Using jitter can help distinguish data points that share similar values on the graph.
+        <br>- Disadvantage: Jittering each data point independently by a random number can impact the overall distribution of the points on the graph which can make the relationship between the two variables hard to tell or less obvious.
+    </p>
+    <p id="p1d">
+        <strong style="color: blue;">D. Floating Text Labels</strong><br>- Since it is in close proximity to its associated data point, a floating text label can help users quickly scan and focus on individual, specific data points.
+        <br>- However for data points that are located close together, the texts can cover other points on the graph, negatively impacting legibility of the text or be mistakenly associated with another data point.
+        <br>- In an attempt to address these issues, I bolded the text and applied stroke with black to make the "mouseover" circles stand out and more obvious. 
+        <br>- Also moved the text inward for the points near the end of the graph so they would not be cut-off. 
+    </p>
+    <p id="p1e">
+        <strong style="color: blue;">E. Relationship</strong><br>- California wine seems to be more expensive than other regions. 
+        <br>- It isn't always the case that higher point/quality of wine means greater price, as shown by the points on the left side of the graph.  
+    </p>
+        <script>
+            d3.json("wines.json").then((data) => {
+               //filters the data so all integer prices, valid states, and within the U.S. 
+               data = data.filter((d) => {return d['price'] != 0 && d['points'] != 0 && d['country']== "US" && (d['state'] == "New York" || d['state'] == "Washington" || d['state']=="Oregon" || d['state']=="California");});
+               console.log(data.length);
+
+               data.forEach((d,i) => { 
+                    //removes the dollar sign in price and converts both price and point values to numbers
+                    d['price'] =  Number(d['price'].replace(/,/g,"").replace(/\$/g,""));
+                    d['points'] =  Number(d['points']);
+               })
+
+               let svg = d3.select("p#p1").append("svg")
+                            .attr("id", "winez")
+                            .attr("width","800")
+                            .attr("height","500");
+            
+                const width = svg.attr("width");
+                const height = svg.attr("height");
+                const margins = {"top": 30, "right": 30, "bottom": 40, "left": 40};
+                const chartWidth = width - margins.left - margins.right;
+                const chartHeight = height - margins.top - margins.bottom;
+
+                //array with min and max of price and points
+                const priceExtent = d3.extent(data, d => d['price']);
+                const pointsExtent = d3.extent(data, (d) => d['points']);
+                
+                //x-scale for price and y-scale for points
+                const xScale = d3.scaleLinear()
+                .domain([0,priceExtent[1]+2]) //added 2 to make them multiples
+                .range([0, chartWidth]); 
+
+                const yScale = d3.scaleLinear()
+                .domain([pointsExtent[0]-2,pointsExtent[1]+2]) //subtracted and added 2 to make them multiples
+                .range([chartHeight,0]); 
+
+                const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+                
+                //x and y gridlines
+                let leftGridlines = d3.axisLeft(yScale)
+                        .tickSize(-chartWidth)
+                        .tickFormat("");
+                    svg.append("g").attr("class", "y gridlines") 
+                        .attr("transform","translate("+(margins.left)+","+margins.top+")")
+                        .style('color','lightgrey')
+                        .call(leftGridlines);
+                let bottomGridlines = d3.axisBottom(xScale)
+                        .tickSize(-chartHeight)
+                        .tickFormat("")
+                    svg.append("g").attr("class", "x gridlines") 
+                        .attr("transform","translate("+margins.left+","+(chartHeight+margins.top)+")")
+                        .style('color','lightgrey')
+                        .call(bottomGridlines);
+                
+                //x and y axes ticks
+                let leftAxis = d3.axisLeft(yScale);
+                    svg.append("g")
+                        .attr("class", "y axis")
+                        .attr("transform","translate("+(margins.left)+","+margins.top+")")
+                        .call(leftAxis);
+                let bottomAxis = d3.axisBottom(xScale);
+                    svg.append("g")
+                        .attr("class", "x axis")
+                        .attr("transform","translate("+margins.left+","+(chartHeight+margins.top)+")")
+                        .call(bottomAxis);
+
+                // x and y axes labels
+                svg.append("text")             
+                    .attr("transform", "translate(" + (width/2) + " ," + (height - 5) + ")")
+                    .style("text-anchor", "middle")
+                    .text("Price");
+                svg.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", - 5)
+                    .attr("x",0 - (height / 2))
+                    .attr("dy", "1em")
+                    .style("text-anchor", "middle")
+                    .text("Points");   
+
+                //main chart region 
+                let chartRegion = svg.append("g").attr("class", "chartRegion")
+                    .attr("transform","translate("+(margins.left)+","+margins.top+")")
+                
+                //data point text labels 
+                let text = d3.select("svg").append("text")
+                    .attr("x",0)
+                    .attr("y",0)
+                    .attr("id","label")
+                    .style("fill","black")
+                    .style("font-weight", "bold")
+                    .text("");
+
+                //floating text labels
+                data.forEach((d, i) => {
+                    let circle = chartRegion.append("circle")
+                        .attr("id", i)
+                        .attr("cx", xScale(d['price'])+jitter(-4,4))
+                        .attr("cy", yScale(d['points'])+jitter(-4,4))
+                        .attr("r", 4)
+                        .attr("opacity", 0.4)
+                        .attr("state",d["state"])
+                        .attr("fill", colorScale(d["state"]));
+                    circle.on("mouseover",function(){
+                        d3.select(this)
+                            .transition().duration(200)
+                            .attr("r",6)
+                            .attr("stroke", "black")
+                            .attr("stroke-width", 3);
+                        d3.select("#label").text(d["title"])
+                            .attr("x",d3.select(this).attr("cx"))
+                            .attr("y",d3.select(this).attr("cy"))
+                            .attr("text-anchor", function() {
+                                if (circle.attr("cx")<250){
+                                    return "start";
+                                } if (circle.attr("cx")>575) {
+                                    d3.select(this).attr("transform", "translate(50,0)");
+                                    return "end";
+                                } else { 
+                                    return "middle";
+                                }
+                                })
+                            ;
+                    });
+                    circle.on("mouseout", function() {
+                        d3.select(this)
+                            .transition().duration(200)
+                            .attr("r",4)
+                            .attr("fill", colorScale(d["state"]))
+                            .attr("stroke", "none");
+                        d3.select("#label").text("");
+                    });
+                })
+                
+                function jitter(mini,maxi) {
+                    return Math.random() * (maxi - mini) + mini;
+                }
+                
+                //legend 
+                let legend = d3.select("p#p1").append("div");
+
+                colorScale.domain().forEach((d,i) => {
+                    d3.select("div").append("span")
+                    .text(d+" ")
+                    .style("color", colorScale(d))
+                    .on("mouseover", function() {
+                        d3.selectAll("#winez circle").each(function() {
+                            let element = d3.select(this);
+                            if (element.attr("state") === d) {
+                                element.attr("opacity", "1");
+                            } else { 
+                                element.attr("opacity","0.2");
+                            }
+                        })
+                    });
+                });
+                d3.select("div").append("span")
+                .text("Clear")
+                .on("mouseover", function() {
+                    d3.selectAll("#winez circle").attr("opacity", "0.4");
+                })
+            }), (error) => {
+                console.log(error);
+            }
+        </script>
+
+    <p id="p2">
+        <svg height="440" width="440"></svg>
+        <script>
+        const chart = d3.select("p#p2");
+        const svg = d3.select("p#p2 svg");
+        const chartWidth = chart.attr("width");
+        const chartHeight = chart.attr("height");
+
+        //creating the array of 441 objects
+            var array = [];
+            for (let i = -160; i < 161; i+=16) {
+                for (let j = -160; j < 161; j+=16) {
+                    array.push({a: i,b: j});
+                }
+            }
+
+        const xScale = d3.scaleLinear().domain([-160,160]).range([30,430]);
+        const yScale = d3.scaleLinear().domain([-160,160]).range([430,30]);
+
+        function showCircles(luminosity){
+            let circles = svg.selectAll("svg")
+                .data(array)
+                .enter()
+                .append("circle")
+                .attr("r", 10)
+                .attr("stroke","grey")
+                .attr("stroke-width", 1)
+                .attr("fill", d=> {return d3.lab(luminosity, d['a'], d['b']);})
+                .attr("cx", d=> xScale(d['a']))
+                .attr("cy", d=>yScale(d['b']));
+        }
+        chart.append("div")
+            .append("input")
+            .attr("type", "range")
+            .attr("min", 0)
+            .attr("max", 100)
+            .attr("step",1)
+            .on("input", function(){
+                showCircles(this.value);
+        });
+
+        showCircles("50");
+        </script>
+    </p>
+</body></html>

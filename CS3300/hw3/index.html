@@ -1,0 +1,243 @@
+<html><body>
+    <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+    </head>
+    <h1>Homework 3</h1>
+    <h2>Problem 1</h2>
+    <p id="p1">
+        <svg id="grid" x="0" y="0" width="240" height="240">
+            <rect x="20" y="20" width="200" height="200" fill="white" stroke="lightgrey"/>
+        </svg>
+        <script>
+            data = [{"x":1.0 ,"y":1.0}, {"x":2.0 ,"y":1.0}, {"x":3.0 ,"y":2.0}, {"x":4.0 ,"y":3.0}, {"x":4.5 ,"y":4.5}, {"x":5.0 ,"y":5.5}, {"x":5.5 ,"y":6.5}, {"x":6.0 ,"y":8.0}, {"x":7.0 ,"y":9.0}, {"x":8.0 ,"y":9.0}, {"x":9.0 ,"y":9.0}];
+            let svg = d3.select("svg#grid"); 
+            let width = svg.attr("width");
+            let height = svg.attr("height");
+
+            //x & y scales that map data coordinates to svg coordinates
+            let xScale = d3.scaleLinear()
+            .domain([0,10]) // range for data values
+            .range([20, width-20]); //range for svg coordinates (20, 220)
+
+            let yScale = d3.scaleLinear()
+            .domain([0,10]) // From our data
+            .range([height-20, 20]); //switched to invert height so start at bottom instead of top
+
+            //axes
+            let leftAxis = d3.axisLeft(yScale).ticks(2);;   //put 2 ticks so only shows 5 and 10 instead of every integer
+            svg.append("g")
+                .attr("class", "y axis")
+                .attr("transform","translate("+20+","+0+")")
+                .call(leftAxis);
+            
+            let bottomAxis = d3.axisBottom(xScale).ticks(2);
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform","translate("+0+","+(height-20)+")")
+                .call(bottomAxis);
+            
+            //gridlines 
+            let horizontalGridlines = d3.axisLeft(yScale)
+                .tickSize(-width+40)        //-width+40 is width of rect
+                .tickFormat(""); 
+            svg.append("g").attr("class", "y gridlines")
+                .attr("transform","translate("+ 20 +","+ 0 +")")
+                .attr("style","color: lightgrey;")
+                .call(horizontalGridlines);
+
+            let verticalGridlines = d3.axisBottom(xScale)
+                .tickSize(height-40)        
+                .tickFormat(""); 
+            svg.append("g").attr("class", "x gridlines")
+                .attr("transform","translate("+ 0 +","+ 20 +")")
+                .attr("style","color: lightgrey;")
+                .call(verticalGridlines);
+            
+            //plot points
+            data.forEach((d, i) => {
+                svg.append("circle")
+                .attr("cx", xScale(d['x']))
+                .attr("cy",yScale(d['y']))
+                .attr("r", 4)
+                .style("fill", "darkblue");
+            });
+
+            //event listener to change circle to red 
+            d3.selectAll("circle")
+            .on("click", function() {
+                d3.select(this).style("fill", "red");
+            });
+        </script>
+    </p>
+
+    <h2>Problem 2</h2>
+    <p id="p2">
+        <h4>The relationship between carat and price is relatively linear with a general positive upward slope, suggesting the higher the carat, the higher the price.<br>
+        There is some discontinuity for diamonds with 1 to 2 carats, as some of their prices seem to be drastically higher.</h4>
+        <script>
+            d3.json("diamonds.json").then((data) => {    //json loaded with live server
+                let svg = d3.select("p#p2").append("svg")
+                    .attr("width","400")
+                    .attr("height","400");
+
+                const width = svg.attr("width");
+                const height = svg.attr("height");
+                const caratMax = d3.max(data, (d) => {return d['carat'];});
+                const priceMax = d3.max(data, (d) => {return d['price'];});
+
+                //x & y scales for carat and price
+                let xScale = d3.scaleLinear()
+                .domain([0,caratMax]) 
+                .range([0, width-5]); 
+
+                let yScale = d3.scaleLinear()
+                .domain([0,priceMax]) 
+                .range([height, 0]); 
+                
+                //gridlines using relevant integers that were identified beforehand
+                const caratInts = [0,1,2];   
+                const priceInts = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+
+                caratInts.forEach((d, i) => {
+                    svg.append("line")
+                    .attr("x1",xScale(i))
+                    .attr("x2",xScale(i))
+                    .attr("y1",5)
+                    .attr("y2",height)
+                    .style("stroke", "lightgrey")
+                    .style("stroke-width", 2);
+                })
+
+                priceInts.forEach((d, i) => {
+                    svg.append("line")
+                    .attr("x1",0)
+                    .attr("x2",width-5)
+                    .attr("y1",yScale(d*1000))
+                    .attr("y2",yScale(d*1000))
+                    .style("stroke", "lightgrey")
+                    .style("stroke-width", 2);
+                })
+
+                //plotting the data points
+                data.forEach((d,i) => {
+                    svg.append("circle")
+                    .attr("cx", Math.floor(xScale(d['carat'])))
+                    .attr("cy",Math.floor(yScale(d['price'])))
+                    .attr("r", 3)
+                    .attr("opacity", 0.4)
+                    .style("fill", "darkblue");
+                })
+            });
+        </script>
+    </p>
+
+    <h2>Problem 3</h2>
+    <p id="p3">
+        <script>
+            d3.json("tweets.json").then((data) => {
+                let svgA = d3.select("p#p3").append("svg")
+                    .attr("width","730")
+                    .attr("height","300");
+
+                let svgB = d3.select("p#p3").append("svg")
+                    .attr("width","730")
+                    .attr("height","300")
+                    .attr("margin-top", "100");
+
+                const width = svgA.attr("width");
+                const height = svgA.attr("height");
+                const totalMax = d3.max(data, (d) => {return d['Total'];});
+
+                //just y scale for total values, don't need x scale since already match
+                let yScale = d3.scaleLinear()
+                .domain([0,totalMax]) 
+                .range([height, 0]); 
+
+                //y scale for Trolls, leftTroll has higher max 
+                const leftMax = d3.max(data, (d) => {return d['LeftTroll'];});
+                
+                let yScale2 = d3.scaleLinear()
+                .domain([0,leftMax]) 
+                .range([height, 0]); 
+
+                //gridlines, x for every 30 pixels, y for every 1000 pixels
+                data.forEach((d, i) => {
+                    svgA.append("line")
+                    .attr("x1",30*i)
+                    .attr("x2",30*i)
+                    .attr("y1",0)
+                    .attr("y2",height)
+                    .style("stroke", "lightgrey")
+                    .style("stroke-width", 2);
+
+                    svgB.append("line")
+                    .attr("x1",30*i)
+                    .attr("x2",30*i)
+                    .attr("y1",0)
+                    .attr("y2",height)
+                    .style("stroke", "lightgrey")
+                    .style("stroke-width", 2);
+
+                    svgA.append("line")
+                    .attr("x1",0)
+                    .attr("x2",width)
+                    .attr("y1",yScale(i*1000))
+                    .attr("y2",yScale(i*1000))
+                    .style("stroke", "lightgrey")
+                    .style("stroke-width", 2);
+
+                    svgB.append("line")
+                    .attr("x1",0)
+                    .attr("x2",width)
+                    .attr("y1",yScale(i*1000))
+                    .attr("y2",yScale(i*1000))
+                    .style("stroke", "lightgrey")
+                    .style("stroke-width", 2);
+
+                    svgA.append("rect")
+                    .attr("x",d.Number)
+                    .attr("y",yScale(d["Total"]))
+                    .attr("width",1)
+                    .attr("height", height)
+                    .style("fill", "orange");
+
+                    svgB.append("rect")
+                    .attr("x",d.Number)
+                    .attr("y",yScale(d["RightTroll"]))
+                    .attr("width",1)
+                    .attr("height", height)
+                    .attr("opacity", 0.5)
+                    .style("fill", "red");
+
+                    svgB.append("rect")
+                    .attr("x",d.Number)
+                    .attr("y",yScale(d["LeftTroll"]))
+                    .attr("width",1)
+                    .attr("height", height)
+                    .attr("opacity", 0.5)
+                    .style("fill", "blue");
+                })
+            });
+        </script>
+    </p>
+
+    <h2>Problem 4</h2>
+    <ul id="p4">
+        <li id="a">
+            This is a sequential scale since the color hue is ranging from a darker to a lighter shade at the ends.<br>
+            This can be an effective scale because by not only varying the lightness but also the hue of the color there is a clearer color contrast that can help better interpret the change in a dataset, especially if the change is gradual. 
+        </li>
+        <li id="b">
+            No, this doesn't seem effective because it violates color conventions based on cultural influence.<br>
+            Red is more commonly associated with negative connotation so would have expected the red to be on the left side with the negative values moving towards it.
+        </li>
+        <li id="c">
+            Those with Blue-Weak/Tritanomaly or Blue-Blind/Tritanopia would have trouble perceiving the hue variations.
+        </li>
+        <li id="d">
+            No, they shouldn't use the rainbow scale for the choropleth map because the different color hues can seem arbitrary (with no clear spectral order) and can be distracting, making it hard to understand the continuous nature of the data.
+            It would just end up highlighting random parts of the data rather than the change in the range of values.
+        </li>
+    </ul>
+</body></html>
+
